@@ -1,3 +1,6 @@
+Final Project Proposal
+Phonebook Application using Hash Tables and Bridges Visualization
+
 Group Members: Stanislav Permiakov, Anthony Valadez
 
 Project Description:
