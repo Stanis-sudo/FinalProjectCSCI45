@@ -1,1 +1,22 @@
-Start here
+Group Members: [Your Name], [Your Partner’s Name]
+
+Project Description:
+
+For our final project, we will create a Phonebook application that leverages hash tables for efficient data storage and retrieval. This project aims to implement a fully functional phonebook system where users can add, search, delete, and update contacts. Each contact will have a name, phone number, and potentially other details like an email address or physical address.
+
+The phonebook entries will be stored in a hash table, which allows for near-constant time complexity for insertion, deletion, and lookup operations. We plan to explore different hash functions and collision resolution strategies, such as chaining and linear probing, to ensure that the phonebook remains efficient even when dealing with large datasets.
+
+To enhance understanding of the hash table’s inner workings, we will use the Bridges library to visualize the structure. With Bridges, we will visualize how contacts are hashed and stored, as well as how collisions are resolved. This will provide an interactive representation of the hash table, allowing users to see how the data structure adapts as contacts are added, removed, or searched for.
+
+Implementation Details:
+
+The phonebook application will be written in C++.
+We will implement the hash table manually, focusing on efficient data handling through hashing and collision resolution techniques.
+Bridges will be used to visualize the hash table. Each time an operation is performed on the phonebook, such as inserting or deleting a contact, the hash table’s state will be updated and displayed visually.
+The application will have a command-line interface for interaction, where users can perform actions such as adding or deleting contacts, while the visualization updates in real-time.
+Technologies:
+
+C++: This is for core functionality and implementing the hash table.
+Bridges Library: For data structure visualization to demonstrate how the hash table handles the phonebook operations.
+GitHub: To collaborate and manage the project source code.
+This project will provide an in-depth exploration of hash tables and their performance while offering a visually engaging way to understand how data is organized and manipulated within the structure.
