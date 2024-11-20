@@ -15,7 +15,7 @@ class Contact:
         self.phoneNumber = phoneNumber
 
     def __str__(self):
-        contactInfo = "First Name: " + self.firstName +"\n"
+        contactInfo = "First Name: " + self.firstName + "\n"
         if self.middleName:
             contactInfo += "Middle Name: " + self.middleName + "\n"
         if self.lastName:

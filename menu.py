@@ -4,9 +4,52 @@ from contact import Contact
 from hash import HashTable
 
 phonebook = {}
-phonebookHash = HashTable(size = 15)
+phonebookHash = HashTable(size = 3)
 
 def add_contact():
+
+    utils.clearScreen()
+
+    name_first = input("First Name:                                 ").strip().title().split() or None
+    if name_first is not None:
+        firstName = name_first[0]
+    else:
+        utils.clearScreen()
+        print("Error!\nFirst Name cannot be empty")
+        utils.goBack()
+        return
+    
+    name_middle = input("Middle Name (To skip press Enter):          ").strip().title().split() or None
+    if name_middle is not None:
+            middleName = name_middle[0]
+    else: middleName = None
+
+    name_last = input("Last Name (To skip press Enter):            ").strip().title().split() or None
+    if name_last is not None:
+        lastName = name_last[0]
+    else: lastName = None
+    
+    inputPhone = input("Phone Number:                               ").strip().split() or None
+    if inputPhone is not None:
+        phone = inputPhone[0]
+    else:
+        utils.clearScreen()
+        print("Error!\nPhone Number cannot be empty")
+        utils.goBack()
+        return
+
+    inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
+    if inputEmail is not None:
+            email = inputEmail[0]
+    else: email = None
+
+    newContact = Contact(firstName, phone, middleName, lastName, email)
+    phonebookHash.insert(newContact)
+    utils.clearScreen()
+    print("Contact was added successfully")
+    utils.goBack()
+
+    """
     utils.clearScreen()
 
     name_parts = input("Enter the name: ").strip().title().split()
@@ -27,8 +70,9 @@ def add_contact():
     while True:
         if utils.go_back() == True:
             break
-
+"""
 def view_contacts():
+    utils.clearScreen()
     phonebookHash.display()
     utils.goBack()
     """
@@ -66,28 +110,5 @@ def delete_contact():
         if utils.goBack() == True:
             break
 
-def test():
-    utils.clearScreen()
-
-    name_first = input("Enter the name: ").strip().title().split()
-
-    if len(name_first) >= 1:
-        firstName = name_first[0]
-    lastName = input("Enter the Last Name: ").strip()
-    phone = input("Enter the phone number: ").strip()
-    if not lastName:
-        print("First Name cannot be empty")
-        utils.goBack()
-        return
-    if not phone:
-        print("Phone Number cannot be empty")
-        utils.goBack()
-        return
-    newContact = Contact(firstName, phone, lastName)
-    phonebookHash.insert(newContact)
-    print("Contact was added successfully")
-   #print(newContact)
-    while True:
-        time.sleep(1)
-        if utils.goBack():
-            break
+#def test():
+    

@@ -32,4 +32,7 @@ class HashTable:
 
     def display(self):
         for i, bucket in enumerate(self.table):
-            print(f"Bucket {i}: {[str(contact) for contact in bucket]}")
+            print(f"Bucket {i}:")
+            for contact in bucket:
+                print(contact)
+            print()
