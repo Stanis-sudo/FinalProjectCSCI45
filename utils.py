@@ -10,4 +10,3 @@ def go_back():
         return True
     else:
         return False
-    time.sleep(1/100)
