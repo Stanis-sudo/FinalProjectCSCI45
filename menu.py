@@ -1,11 +1,13 @@
 import utils
 import time
 from contact import Contact
+from hash import HashTable
 
 phonebook = {}
+phonebookHash = HashTable(size = 15)
 
 def add_contact():
-    utils.clear_screen()
+    utils.clearScreen()
 
     name_parts = input("Enter the name: ").strip().title().split()
 
@@ -27,30 +29,33 @@ def add_contact():
             break
 
 def view_contacts():
+    phonebookHash.display()
+    utils.goBack()
+    """
     while True:
-        utils.clear_screen()
+        utils.clearScreen()
         if phonebook:
             print("\nPhonebook Contacts:")
             for name, phone in phonebook.items():
                 print(f"{name}: {phone}")
         else:
             print("Phonebook is empty.")
-        if utils.go_back() == True:
+        if utils.goBack() == True:
             break
-
+    """
 def search_contact():
     while True:
-        utils.clear_screen()
+        utils.clearScreen()
         name = input("Enter the name to search: ").strip().title()
         if name in phonebook:
             print(f"{name}: {phonebook[name]}")
         else:
             print("Contact not found.")
-        if utils.go_back() == True:
+        if utils.goBack() == True:
             break
 
 def delete_contact():
-    utils.clear_screen()
+    utils.clearScreen()
     name = input("Enter the name to delete: ").strip().title()
     if name in phonebook:
         del phonebook[name]
@@ -58,11 +63,11 @@ def delete_contact():
     else:
         print("Contact not found.")
     while True:
-        if utils.go_back() == True:
+        if utils.goBack() == True:
             break
 
 def test():
-    utils.clear_screen()
+    utils.clearScreen()
 
     name_first = input("Enter the name: ").strip().title().split()
 
@@ -72,15 +77,17 @@ def test():
     phone = input("Enter the phone number: ").strip()
     if not lastName:
         print("First Name cannot be empty")
-        utils.go_back()
+        utils.goBack()
         return
     if not phone:
         print("Phone Number cannot be empty")
-        utils.go_back()
+        utils.goBack()
         return
     newContact = Contact(firstName, phone, lastName)
-    print(newContact)
+    phonebookHash.insert(newContact)
+    print("Contact was added successfully")
+   #print(newContact)
     while True:
         time.sleep(1)
-        if utils.go_back():
+        if utils.goBack():
             break

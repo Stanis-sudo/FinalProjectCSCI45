@@ -4,7 +4,7 @@ import time
 
 def main():
     while True:
-        utils.clear_screen()
+        utils.clearScreen()
         print("\n.:: Phonebook Menu ::.\n")
         print(" 1. Add Contact")
         print(" 2. View Contacts")
@@ -21,7 +21,7 @@ def main():
         elif choice == "4":
             menu.delete_contact()
         elif choice == "5" or choice.lower() == "exit":
-            utils.clear_screen()
+            utils.clearScreen()
             print("Exiting phonebook. Goodbye!")
             break
         elif choice == "6":
