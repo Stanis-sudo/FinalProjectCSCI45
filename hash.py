@@ -1,4 +1,5 @@
 import utils
+import pickle
 
 class HashTable:
 
@@ -36,3 +37,19 @@ class HashTable:
             for contact in bucket:
                 print(contact)
             print()
+    def save(self, filename ='hashData.pkl'):
+        with open(filename, 'wb') as file:
+            pickle.dump(self.table, file)
+            print(" Data Saved.")
+    def load (self,filename = 'hashData.pkl'):
+        try:
+            with open(filename, 'rb') as file:
+                if file.readable() and file.peek(1):
+                    self.table = pickle.load(file)
+                    print("Data Loaded.")
+                else:
+                    print("Empty file")
+                    self.table = [[] for _ in range(self.size)]
+        except FileNotFoundError:
+            print("No Data Found.")
+            self.table = [[] for _ in range(self.size)]
