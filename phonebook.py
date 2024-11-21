@@ -22,6 +22,7 @@ def main():
             menu.delete_contact()
         elif choice == "5" or choice.lower() == "exit":
             utils.clearScreen()
+            menu.phonebookHash.save()
             print("Exiting phonebook. Goodbye!")
             break
         elif choice == "6":
