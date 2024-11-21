@@ -10,7 +10,7 @@ def main():
         print(" 2. View Contacts")
         print(" 3. Search Contact")
         print(" 4. Delete Contact")
-        print(" 5. Exit")
+        print(" 5. Save and Exit")
         choice = input("\n Choose an option: ")
         if choice == "1":
             menu.add_contact()
