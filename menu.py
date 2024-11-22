@@ -4,7 +4,7 @@ from contact import Contact
 from hash import HashTable
 
 phonebook = {}
-phonebookHash = HashTable(size = 3)
+phonebookHash = HashTable(size = 15)
 phonebookHash.load()
 
 def add_contact():

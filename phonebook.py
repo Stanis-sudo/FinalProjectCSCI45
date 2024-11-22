@@ -4,6 +4,7 @@ import time
 
 def main():
     while True:
+        
         utils.clearScreen()
         print("\n.:: Phonebook Menu ::.\n")
         print(" 1. Add Contact")
@@ -31,4 +32,5 @@ def main():
             print("\n Invalid option, please try again.")
         time.sleep(1/100)
 
-main()
+if __name__ == "__main__":
+    main()

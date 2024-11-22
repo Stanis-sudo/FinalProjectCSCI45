@@ -1,0 +1,9 @@
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore pickle data files
+*.pkl
+bridgesTest.py
+hashData.pkl

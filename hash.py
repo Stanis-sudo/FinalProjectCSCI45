@@ -1,3 +1,5 @@
+
+import visualizer
 import utils
 import pickle
 
@@ -30,6 +32,7 @@ class HashTable:
                         continue
             
         bucket.append(contact)
+        visualizer.visualize(self)
 
     def display(self):
         for i, bucket in enumerate(self.table):
@@ -53,3 +56,6 @@ class HashTable:
         except FileNotFoundError:
             print("No Data Found.")
             self.table = [[] for _ in range(self.size)]
+
+
+
