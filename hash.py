@@ -1,13 +1,15 @@
 
-import visualizer
+
 import utils
 import pickle
+from icecream import ic
 
 class HashTable:
 
     def __init__(self, size = 10):
         self.size = size
         self.table = [[] for _ in range(size)]
+        self.maxElements = 0
 
     def customHash(self, key):
         hashValue = sum(ord(char) for char in key)
@@ -32,7 +34,13 @@ class HashTable:
                         continue
             
         bucket.append(contact)
-        visualizer.visualize(self)
+        self.maxElements = max(len(bucket) for bucket in self.table) if self.table else 0
+        if self.maxElements > 2:
+            self.resize()
+            ic(f"Hash Size: {len(self.table)}")
+            utils.goBack()
+            return
+        
 
     def display(self):
         for i, bucket in enumerate(self.table):
@@ -40,22 +48,38 @@ class HashTable:
             for contact in bucket:
                 print(contact)
             print()
+
+    def resize(self):
+        newHashTable = HashTable(len(self.table) * 2)
+        for i, bucket in enumerate(self.table):
+            for contact in bucket:
+                newHashTable.insert(contact)
+        self.table = newHashTable.table
+
     def save(self, filename ='hashData.pkl'):
+        data = []
+        for bucket in self.table:
+            data.extend(bucket)
         with open(filename, 'wb') as file:
-            pickle.dump(self.table, file)
-            print(" Data Saved.")
+            pickle.dump(data, file)
+        print(" Data Saved.")
+
     def load (self,filename = 'hashData.pkl'):
         try:
             with open(filename, 'rb') as file:
                 if file.readable() and file.peek(1):
-                    self.table = pickle.load(file)
+                    data = pickle.load(file)
                     print("Data Loaded.")
+                    self.table = [[] for _ in range(self.size)]
+                    for value in data:
+                        self.insert(value)
                 else:
                     print("Empty file")
                     self.table = [[] for _ in range(self.size)]
         except FileNotFoundError:
             print("No Data Found.")
             self.table = [[] for _ in range(self.size)]
-
+        except Exception as e:
+            print(f"Error loading file: {e}")
 
 

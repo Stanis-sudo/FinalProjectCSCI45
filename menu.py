@@ -1,10 +1,11 @@
 import utils
 import time
+import visualizer
 from contact import Contact
 from hash import HashTable
 
 phonebook = {}
-phonebookHash = HashTable(size = 15)
+phonebookHash = HashTable(size = 2)
 phonebookHash.load()
 
 def add_contact():
@@ -48,6 +49,7 @@ def add_contact():
     phonebookHash.insert(newContact)
     utils.clearScreen()
     print("Contact was added successfully")
+    visualizer.visualize(phonebookHash)
     utils.goBack()
 
     """
