@@ -6,7 +6,7 @@ import time
 from visualizer import visualize
 from icecream import ic
 
-fileName = 'hashData50.pkl'
+fileName = 'hashData10.pkl'
 maxCountBucket = 5
 hashInitSize = 3
 
@@ -108,7 +108,7 @@ class HashTable:
                     self.table = [[] for _ in range(minSize)]
                     self.size = minSize
                     ic(len(self.table))
-                    utils.goBack()
+                    #utils.goBack()
                     count = 0
                     for value in data:
                         self.insert(value)
@@ -134,3 +134,12 @@ class HashTable:
             if n % i == 0:
                 return False
         return True
+    
+    def searchContacts(self, partialName):
+        partialName = partialName
+        results = []  
+        for bucket in self.table:
+            for contact in bucket:
+                if partialName in contact.fullName.lower() or partialName in contact.partialName.lower():  # Check if partial_name is a substring
+                    results.append(contact)
+        return results

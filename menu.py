@@ -79,29 +79,37 @@ def view_contacts():
     utils.clearScreen()
     phonebookHash.display()
     utils.goBack()
-    """
-    while True:
-        utils.clearScreen()
-        if phonebook:
-            print("\nPhonebook Contacts:")
-            for name, phone in phonebook.items():
-                print(f"{name}: {phone}")
-        else:
-            print("Phonebook is empty.")
-        if utils.goBack() == True:
-            break
-    """
 
 def search_contact():
-    while True:
-        utils.clearScreen()
-        name = input("Enter the name to search: ").strip().title()
-        if name in phonebook:
-            print(f"{name}: {phonebook[name]}")
+    utils.clearScreen()
+    name = input("Enter a name to search: ").strip().lower().split() or None
+    fullName = " ".join(name) if name else None
+    result = phonebookHash.searchContacts(fullName)
+    if result:
+        if len(result) == 1:
+            utils.clearScreen()
+            print(result[0])
         else:
-            print("Contact not found.")
-        if utils.goBack() == True:
-            break
+            for i, contact in enumerate(result):
+                print(f"{i + 1}: {contact.fullName}")
+            while True:
+                try:
+                    userInput = input("\nChoose the option or press Enter to return: ")
+                    if userInput == "": return
+                    option = int(userInput)         # Convert input to an integer
+                    if option < 1 or option > len(result):
+                        print("Invalid input! Please enter a valid number.")
+                    else :
+                        utils.clearScreen()
+                        print(result[option - 1])
+                        break
+                except ValueError:
+                    print("Invalid input! Please enter a valid number.")
+
+    else:
+        print("No matching contacts found.")
+    utils.goBack()
+        
 
 def delete_contact():
     utils.clearScreen()

@@ -3,14 +3,10 @@ class Contact:
         self.firstName = firstName
         self.middleName = middleName
         self.lastName = lastName
-        if (not middleName and not lastName):
-            self.fullName = firstName
-        elif (not middleName):
-            self.fullName = firstName + " " + lastName
-        elif (not lastName):
-            self.fullName = firstName + " " + middleName
-        else:
-            self.fullName = firstName + " " + middleName + " " + lastName
+        # Construct fullName
+        self.fullName = " ".join(filter(None, [firstName, middleName, lastName]))
+        # Construct partialName
+        self.partialName = " ".join(filter(None, [firstName, lastName]))
         self.emailAddress = emailAddress
         self.phoneNumber = phoneNumber
 
