@@ -5,5 +5,10 @@ __pycache__/
 
 # Ignore pickle data files
 *.pkl
+
+# Ignore following files
+contacts.txt
+logo.txt
 bridgesTest.py
-hashData.pkl
+generateContact.py
+saveContacts.py

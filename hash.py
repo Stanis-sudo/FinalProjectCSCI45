@@ -1,22 +1,43 @@
 
-
+import math
 import utils
 import pickle
+import time
+from visualizer import visualize
 from icecream import ic
+
+fileName = 'hashData25.pkl'
 
 class HashTable:
 
-    def __init__(self, size = 10):
+    def __init__(self, size = 11):
         self.size = size
         self.table = [[] for _ in range(size)]
         self.maxElements = 0
+        self.contactCount = 0
 
     def customHash(self, key):
-        hashValue = sum(ord(char) for char in key)
+        #hashValue = sum(ord(char) for char in key)
+
+        hashValue = 5381  # A common initial value for DJB2
+        for char in key:
+            hashValue = (hashValue * 33) + ord(char)  # Hashing with multiplication by 33
         return hashValue % self.size
     
+    def customPoliHash(self, key):
+        base = 31
+        mod = self.size
+        hashValue = 0
+        power = 1  # Represents base^i % mod
+        
+        for char in key:
+            hashValue = (hashValue + ord(char) * power) % mod
+            power = (power * base) % mod  # Update power for the next character
+        
+        return hashValue
+    
     def insert(self, contact):
-        index = self.customHash(contact.fullName)
+        index = self.customPoliHash(contact.fullName)
         bucket = self.table[index]
 
         for i, contactExist in enumerate(bucket):
@@ -34,11 +55,13 @@ class HashTable:
                         continue
             
         bucket.append(contact)
+        self.contactCount += 1
         self.maxElements = max(len(bucket) for bucket in self.table) if self.table else 0
-        if self.maxElements > 2:
+        if self.maxElements > 5:
+            #ic(self.table)
             self.resize()
-            ic(f"Hash Size: {len(self.table)}")
-            utils.goBack()
+            #ic(f"Hash Size: {len(self.table)}")
+            #utils.goBack()
             return
         
 
@@ -56,7 +79,7 @@ class HashTable:
                 newHashTable.insert(contact)
         self.table = newHashTable.table
 
-    def save(self, filename ='hashData.pkl'):
+    def save(self, filename = fileName):
         data = []
         for bucket in self.table:
             data.extend(bucket)
@@ -64,15 +87,34 @@ class HashTable:
             pickle.dump(data, file)
         print(" Data Saved.")
 
-    def load (self,filename = 'hashData.pkl'):
+    def load (self,filename = fileName):
         try:
             with open(filename, 'rb') as file:
                 if file.readable() and file.peek(1):
                     data = pickle.load(file)
                     print("Data Loaded.")
-                    self.table = [[] for _ in range(self.size)]
+                    # Calculate the minimum size based on the load factor
+                    minSize = math.ceil(len(data) / 0.7)
+                    # Round up to the next power of 2 for better performance
+                    #newSize = 2**math.ceil(math.log2(min_size))
+                    #ic(self.size, len(data), newSize)
+
+                    # Find next prime number
+                    while not self.isPrime(minSize):
+                        minSize += 1
+                    self.table = [[] for _ in range(minSize)]
+                    self.size = minSize
+                    ic(len(self.table))
+                    utils.goBack()
+                    count = 0
                     for value in data:
                         self.insert(value)
+                        #ic(self.table)
+                        #utils.goBack()
+                        visualize(self)
+                        count += 1
+                        ic("Visualize # ", count)
+                        #time.sleep(0.5)
                 else:
                     print("Empty file")
                     self.table = [[] for _ in range(self.size)]
@@ -82,4 +124,10 @@ class HashTable:
         except Exception as e:
             print(f"Error loading file: {e}")
 
-
+    def isPrime(self, n):
+        if n <= 1:
+            return False
+        for i in range(2, int(n ** 0.5) + 1):
+            if n % i == 0:
+                return False
+        return True

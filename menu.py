@@ -1,11 +1,11 @@
 import utils
-import time
+
 import visualizer
 from contact import Contact
 from hash import HashTable
 
 phonebook = {}
-phonebookHash = HashTable(size = 2)
+phonebookHash = HashTable()
 phonebookHash.load()
 
 def add_contact():

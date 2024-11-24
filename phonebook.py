@@ -12,7 +12,11 @@ def main():
         print(" 3. Search Contact")
         print(" 4. Delete Contact")
         print(" 5. Save and Exit")
-        choice = input("\n Choose an option: ")
+        if menu.phonebookHash.contactCount > 0:
+            print(f"\n Total records: {menu.phonebookHash.contactCount}\n")
+        else:
+            print(" Phonebook is empty")
+        choice = input(" Choose an option: ")
         if choice == "1":
             menu.add_contact()
         elif choice == "2":
@@ -26,8 +30,6 @@ def main():
             menu.phonebookHash.save()
             print("Exiting phonebook. Goodbye!")
             break
-        elif choice == "6":
-            menu.test()
         else:
             print("\n Invalid option, please try again.")
         time.sleep(1/100)
