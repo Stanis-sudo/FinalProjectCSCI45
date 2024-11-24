@@ -6,7 +6,7 @@ import time
 # Initialize Bridges
     # create the Bridges object, set credentials
 bridges = Bridges(5, "Stan", "1558142281567")
-        # set title, description
+    # set title, description
 bridges.set_title("Phonebook Storage Visualization")
 bridges.set_description("The Phonebook app uses a custom Hash table to store contacts.")
 #bridges.post_visualization_link(False)
@@ -17,7 +17,6 @@ def visualize(obj):
     arr = Array1D(len(obj.table))
     for i, bucket in enumerate(obj.table):
         if bucket:
-            #bucket_str = ", ".join(str(contact) for contact in bucket)
             arr[i].label = len(bucket)
             if len(bucket) == 1:
                 color = "deepskyblue"
