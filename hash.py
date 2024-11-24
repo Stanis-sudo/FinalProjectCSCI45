@@ -6,7 +6,7 @@ import time
 from visualizer import visualize
 from icecream import ic
 
-fileName = 'hashData.pkl'
+fileName = 'hashData50.pkl'
 maxCountBucket = 5
 hashInitSize = 3
 
@@ -66,13 +66,14 @@ class HashTable:
             #utils.goBack()
             return
         
-
     def display(self):
-        for i, bucket in enumerate(self.table):
-            print(f"Bucket {i}:")
+        i = 1
+        for b, bucket in enumerate(self.table):
             for contact in bucket:
-                print(contact)
-            print()
+                print (f"{i} (Bucket {b}):")
+                print(contact.fullName + '\n' + contact.phoneNumber + '\n')
+                i += 1
+
 
     def resize(self):
         newHashTable = HashTable(math.ceil(len(self.table) / 0.7))
@@ -87,14 +88,14 @@ class HashTable:
             data.extend(bucket)
         with open(filename, 'wb') as file:
             pickle.dump(data, file)
-        print(" Data Saved.")
+        ic(" Data Saved.")
 
     def load (self,filename = fileName):
         try:
             with open(filename, 'rb') as file:
                 if file.readable() and file.peek(1):
                     data = pickle.load(file)
-                    print("Data Loaded.")
+                    ic("Data Loaded.")
                     # Calculate the minimum size based on the load factor
                     minSize = math.ceil(len(data) / 0.7)
                     # Round up to the next power of 2 for better performance
@@ -116,15 +117,15 @@ class HashTable:
                         visualize(self)
                         count += 1
                         ic("Visualize # ", count)
-                        #time.sleep(0.5)
                 else:
-                    print("Empty file")
+                    ic("Empty file")
                     self.table = [[] for _ in range(self.size)]
         except FileNotFoundError:
-            print("No Data Found.")
+            ic("No Data Found.")
             self.table = [[] for _ in range(self.size)]
         except Exception as e:
-            print(f"Error loading file: {e}")
+            ic(f"Error loading file: {e}")
+            self.table = [[] for _ in range(self.size)]
 
     def isPrime(self, n):
         if n <= 1:

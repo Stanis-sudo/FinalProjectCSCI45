@@ -74,6 +74,7 @@ def add_contact():
         if utils.go_back() == True:
             break
 """
+
 def view_contacts():
     utils.clearScreen()
     phonebookHash.display()
@@ -90,6 +91,7 @@ def view_contacts():
         if utils.goBack() == True:
             break
     """
+
 def search_contact():
     while True:
         utils.clearScreen()
