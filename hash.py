@@ -6,11 +6,13 @@ import time
 from visualizer import visualize
 from icecream import ic
 
-fileName = 'hashData25.pkl'
+fileName = 'hashData.pkl'
+maxCountBucket = 5
+hashInitSize = 3
 
 class HashTable:
 
-    def __init__(self, size = 11):
+    def __init__(self, size = hashInitSize):
         self.size = size
         self.table = [[] for _ in range(size)]
         self.maxElements = 0
@@ -57,7 +59,7 @@ class HashTable:
         bucket.append(contact)
         self.contactCount += 1
         self.maxElements = max(len(bucket) for bucket in self.table) if self.table else 0
-        if self.maxElements > 5:
+        if self.maxElements > maxCountBucket:
             #ic(self.table)
             self.resize()
             #ic(f"Hash Size: {len(self.table)}")
@@ -73,7 +75,7 @@ class HashTable:
             print()
 
     def resize(self):
-        newHashTable = HashTable(len(self.table) * 2)
+        newHashTable = HashTable(math.ceil(len(self.table) / 0.7))
         for i, bucket in enumerate(self.table):
             for contact in bucket:
                 newHashTable.insert(contact)

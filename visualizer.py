@@ -29,8 +29,10 @@ def visualize(obj):
                 color = "lightpink"
             else: color = "salmon"
             arr[i].visualizer.color = color
+            arr[i].opacity = 0.50
         else:
             arr[i].label = "Empty"
             arr[i].visualizer.color = "cyan"
+    
     bridges.set_data_structure(arr)
     bridges.visualize()

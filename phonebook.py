@@ -15,7 +15,7 @@ def main():
         if menu.phonebookHash.contactCount > 0:
             print(f"\n Total records: {menu.phonebookHash.contactCount}\n")
         else:
-            print(" Phonebook is empty")
+            print("\n Phonebook is empty")
         choice = input(" Choose an option: ")
         if choice == "1":
             menu.add_contact()
