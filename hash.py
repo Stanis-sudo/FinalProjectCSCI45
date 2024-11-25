@@ -2,13 +2,13 @@
 import math
 import utils
 import pickle
-import time
 from visualizer import visualize
 from icecream import ic
 
-fileName = 'hashData10.pkl'
+fileName = 'hashData.pkl'
 maxCountBucket = 5
 hashInitSize = 3
+ic.disable()
 
 class HashTable:
 
@@ -136,10 +136,16 @@ class HashTable:
         return True
     
     def searchContacts(self, partialName):
-        partialName = partialName
         results = []  
         for bucket in self.table:
             for contact in bucket:
                 if partialName in contact.fullName.lower() or partialName in contact.partialName.lower():  # Check if partial_name is a substring
                     results.append(contact)
         return results
+    
+    def deleteOneContact(self, fullName):
+        for bucket in self.table:
+            for contact in bucket:
+                if fullName.lower() in contact.fullName.lower():
+                    bucket.remove(contact)
+                    self.contactCount -= 1

@@ -1,14 +1,12 @@
 import utils
-
-import visualizer
+from visualizer import visualize
 from contact import Contact
 from hash import HashTable
 
-phonebook = {}
 phonebookHash = HashTable()
 phonebookHash.load()
 
-def add_contact():
+def addContact():
 
     utils.clearScreen()
 
@@ -49,38 +47,17 @@ def add_contact():
     phonebookHash.insert(newContact)
     utils.clearScreen()
     print("Contact was added successfully")
-    visualizer.visualize(phonebookHash)
     utils.goBack()
+    phonebookHash.save()
+    visualize(phonebookHash)
 
-    """
-    utils.clearScreen()
 
-    name_parts = input("Enter the name: ").strip().title().split()
-
-# Check if at least two words are entered
-    if len(name_parts) >= 2:
-        firstName = name_parts[0]
-        lastName = name_parts[1]
-        name = firstName + " " + lastName
-        print("Name:", name)
-    else:
-        print("Please enter both a first and last name.")
-    #firstName, lastName = input("Enter the name: ").strip().title().split(" ")
-    #name = firstName + " " + lastName
-    phone = input("Enter the phone number: ").strip()
-    phonebook[name] = phone
-    print(f"\nContact {name} added successfully.")
-    while True:
-        if utils.go_back() == True:
-            break
-"""
-
-def view_contacts():
+def viewContacts():
     utils.clearScreen()
     phonebookHash.display()
     utils.goBack()
 
-def search_contact():
+def searchContact():
     utils.clearScreen()
     name = input("Enter a name to search: ").strip().lower().split() or None
     fullName = " ".join(name) if name else None
@@ -110,18 +87,52 @@ def search_contact():
         print("No matching contacts found.")
     utils.goBack()
         
-
-def delete_contact():
+def deleteContact():
+    global phonebookHash  # Tell Python to use the global variable
     utils.clearScreen()
-    name = input("Enter the name to delete: ").strip().title()
-    if name in phonebook:
-        del phonebook[name]
-        print(f"Contact '{name}' deleted successfully.")
+    name = input("Enter a name to delete a contact\n(\'Delete All\' to delete all contacts): ").strip().lower().split() or None
+    fullName = " ".join(name) if name else None
+    if fullName.lower() == "delete all": 
+        newPhonebookHash = HashTable()
+        phonebookHash = newPhonebookHash
+        phonebookHash.save()
+        print("The Phonebook has been erased successfully")
+        utils.goBack()
+        return
+    fullName = " ".join(name) if name else None
+    result = phonebookHash.searchContacts(fullName)
+    if result:
+        if len(result) == 1:
+            verifyDeleteContact(result[0].fullName)
+            return           
+        else:
+            for i, contact in enumerate(result):
+                print(f"{i + 1}: {contact.fullName}")
+            while True:
+                try:
+                    userInput = input("\nChoose the option or press Enter to return: ")
+                    if userInput == "": return
+                    option = int(userInput)         # Convert input to an integer
+                    if option < 1 or option > len(result):
+                        print("Invalid input! Please enter a valid number.")
+                    else :
+                        verifyDeleteContact(result[option - 1].fullName)
+                        break
+                except ValueError:
+                    print("Invalid input! Please enter a valid number.")
     else:
-        print("Contact not found.")
-    while True:
-        if utils.goBack() == True:
-            break
+        print("No matching contacts found.")
+        utils.goBack()
 
-#def test():
-    
+def verifyDeleteContact(name):
+    utils.clearScreen()
+    while True:
+        question = input(f"Do you want to delete the contact \'{name}\'  (Y / N) ? :")
+        if question.lower() == "y":
+            phonebookHash.deleteOneContact(name)
+            phonebookHash.save()
+            visualize(phonebookHash)
+            return
+        elif question.lower() == "n": return
+        else: 
+            print("Invalid input! Try again\n")
