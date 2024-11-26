@@ -86,7 +86,12 @@ def searchContact():
     else:
         print("No matching contacts found.")
     utils.goBack()
-        
+
+def updateContact():
+    utils.clearScreen()
+    print("This is an updateContact function")
+    utils.goBack()
+
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable
     utils.clearScreen()

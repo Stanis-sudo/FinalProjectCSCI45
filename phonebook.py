@@ -10,8 +10,9 @@ def main():
         print(" 1. Add Contact")
         print(" 2. View Contacts")
         print(" 3. Search Contact")
-        print(" 4. Delete Contact")
-        print(" 5. Exit")
+        print(" 4. Update Contact")
+        print(" 5. Delete Contact")
+        print(" 6. Exit")
         if menu.phonebookHash.contactCount > 0:
             print(f"\n Total records: {menu.phonebookHash.contactCount}\n")
         else:
@@ -24,8 +25,10 @@ def main():
         elif choice == "3":
             menu.searchContact()
         elif choice == "4":
+            menu.updateContact()
+        elif choice == "5":
             menu.deleteContact()
-        elif choice == "5" or choice.lower() == "exit":
+        elif choice == "6" or choice.lower() == "exit":
             utils.clearScreen()
             print("Exiting phonebook. Goodbye!")
             break
