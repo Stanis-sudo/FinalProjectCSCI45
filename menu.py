@@ -1,27 +1,55 @@
 import utils
+import sys
+import time
 from visualizer import visualize
 from contact import Contact
 from hash import HashTable
+from icecream import ic
+
+ic.disable()
 
 phonebookHash = HashTable()
-phonebookHash.load()
+
+def init():
+    with open("visualizer.log", "a") as file:
+        print("<-----New session----->\n", file = file)
+    phonebookHash.load()
+
+def menuSelector(choice):
+    if choice in ["1", "2", "3", "4", "5", "6"]:
+        utils.clearScreen()
+        if choice == "1":
+            addContact()
+        elif choice == "2":
+            viewContacts()
+        elif choice == "3":
+            searchContact()
+        elif choice == "4":
+            ic("Update contact")
+            updateContact()
+        elif choice == "5":
+            deleteContact()
+        elif choice == "6" or choice.lower() == "exit":
+            utils.clearScreen()
+            print("Exiting phonebook. Goodbye!")
+            return True
+    else:
+        print("\n Invalid option, please try again.")
+    utils.goBack()
+    return False
 
 def addContact():
-
-    utils.clearScreen()
-
     name_first = input("First Name:                                 ").strip().title().split() or None
     if name_first is not None:
         firstName = name_first[0]
     else:
         utils.clearScreen()
         print("Error!\nFirst Name cannot be empty")
-        utils.goBack()
         return
     
     name_middle = input("Middle Name (To skip press Enter):          ").strip().title().split() or None
     if name_middle is not None:
-            middleName = name_middle[0]
+        middleName = name_middle[0]
     else: middleName = None
 
     name_last = input("Last Name (To skip press Enter):            ").strip().title().split() or None
@@ -35,27 +63,23 @@ def addContact():
     else:
         utils.clearScreen()
         print("Error!\nPhone Number cannot be empty")
-        utils.goBack()
         return
 
     inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
     if inputEmail is not None:
-            email = inputEmail[0]
+        email = inputEmail[0]
     else: email = None
 
     newContact = Contact(firstName, phone, middleName, lastName, email)
     phonebookHash.insert(newContact)
+    phonebookHash.save()
+    visualize(phonebookHash, "menu.addContact function")
     utils.clearScreen()
     print("Contact was added successfully")
-    utils.goBack()
-    phonebookHash.save()
-    visualize(phonebookHash)
 
 
 def viewContacts():
-    utils.clearScreen()
     phonebookHash.display()
-    utils.goBack()
 
 def searchContact():
     utils.clearScreen()
@@ -88,13 +112,10 @@ def searchContact():
     utils.goBack()
 
 def updateContact():
-    utils.clearScreen()
     print("This is an updateContact function")
-    utils.goBack()
 
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable
-    utils.clearScreen()
     name = input("Enter a name to delete a contact\n(\'Delete All\' to delete all contacts): ").strip().lower().split() or None
     fullName = " ".join(name) if name else None
     if fullName.lower() == "delete all": 
@@ -127,16 +148,14 @@ def deleteContact():
                     print("Invalid input! Please enter a valid number.")
     else:
         print("No matching contacts found.")
-        utils.goBack()
 
 def verifyDeleteContact(name):
-    utils.clearScreen()
     while True:
         question = input(f"Do you want to delete the contact \'{name}\'  (Y / N) ? :")
         if question.lower() == "y":
             phonebookHash.deleteOneContact(name)
             phonebookHash.save()
-            visualize(phonebookHash)
+            visualize(phonebookHash, "menu.verifyDeleteContact function")
             return
         elif question.lower() == "n": return
         else: 

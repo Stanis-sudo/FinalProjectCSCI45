@@ -8,7 +8,7 @@ from icecream import ic
 fileName = 'hashData.pkl'
 maxCountBucket = 5
 hashInitSize = 3
-ic.disable()
+#ic.disable()
 
 class HashTable:
 
@@ -114,7 +114,7 @@ class HashTable:
                         self.insert(value)
                         #ic(self.table)
                         #utils.goBack()
-                        visualize(self)
+                        visualize(self, "hash.load function")
                         count += 1
                         ic("Visualize # ", count)
                 else:

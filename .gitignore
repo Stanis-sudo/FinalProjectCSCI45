@@ -5,6 +5,7 @@ __pycache__/
 
 # Ignore pickle data files
 *.pkl
+*.log
 
 # Ignore following files
 contacts.txt

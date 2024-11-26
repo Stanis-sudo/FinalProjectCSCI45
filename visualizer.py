@@ -1,7 +1,8 @@
 from bridges.bridges import *
 from bridges.array import *
 from bridges.array1d import *
-import time
+import datetime
+import sys
 
 # Initialize Bridges
     # create the Bridges object, set credentials
@@ -12,7 +13,7 @@ bridges.set_description("The Phonebook app uses a custom Hash table to store con
 #bridges.post_visualization_link(False)
 
 
-def visualize(obj):
+def visualize(obj, operation):
     # Create a Bridges array to represent the hash table
     arr = Array1D(len(obj.table))
     for i, bucket in enumerate(obj.table):
@@ -32,6 +33,14 @@ def visualize(obj):
         else:
             arr[i].label = "Empty"
             arr[i].visualizer.color = "cyan"
-    
-    bridges.set_data_structure(arr)
-    bridges.visualize()
+
+    with open("visualizer.log", "a") as file:
+        # Redirect stdout to log file
+        sys.stdout = file
+        bridges.set_data_structure(arr)
+        print(f"[{datetime.datetime.now()}] - \'{operation}\'       element={obj.contactCount}       hashSize={obj.size}")  # Log the current timestamp
+        bridges.visualize()
+        # Reset stdout back to default
+        sys.stdout = sys.__stdout__
+        
+        

@@ -3,8 +3,8 @@ import menu
 import time
 
 def main():
+    menu.init()
     while True:
-        
         utils.clearScreen()
         print("\n.:: Phonebook Menu ::.\n")
         print(" 1. Add Contact")
@@ -17,24 +17,10 @@ def main():
             print(f"\n Total records: {menu.phonebookHash.contactCount}\n")
         else:
             print("\n Phonebook is empty")
-        choice = input(" Choose an option: ")
-        if choice == "1":
-            menu.addContact()
-        elif choice == "2":
-            menu.viewContacts()
-        elif choice == "3":
-            menu.searchContact()
-        elif choice == "4":
-            menu.updateContact()
-        elif choice == "5":
-            menu.deleteContact()
-        elif choice == "6" or choice.lower() == "exit":
-            utils.clearScreen()
-            print("Exiting phonebook. Goodbye!")
-            break
-        else:
-            print("\n Invalid option, please try again.")
-        time.sleep(1/100)
+        choice = input(" Choose an option: ").strip()
+        if menu.menuSelector(choice):
+            return
+        time.sleep(1/200)
 
 if __name__ == "__main__":
     main()
