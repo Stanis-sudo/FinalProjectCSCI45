@@ -1,5 +1,5 @@
 import utils
-import sys
+import datetime
 import time
 from visualizer import visualize
 from contact import Contact
@@ -13,7 +13,18 @@ phonebookHash = HashTable()
 def init():
     with open("visualizer.log", "a") as file:
         print("<-----New session----->\n", file = file)
+    utils.clearScreen()
+    print(" ___ _  _  ___  _  _ ___ ___  ___   ___  _  __")
+    print("| _ \ || |/ _ \| \| | __| _ )/ _ \ / _ \| |/ /")
+    print("|  _/ __ | (_) | .` | _|| _ \ (_) | (_) | ' < ")
+    print("|_| |_||_|\___/|_|\_|___|___/\___/ \___/|_|\_\\")
+    print("\n\nInitialization...")
+    startTime = datetime.datetime.now()
     phonebookHash.load()
+    remTime = datetime.datetime.now() - startTime - datetime.timedelta(seconds = 1.5)
+    # Check if the remaining time is greater than 0
+    if remTime.total_seconds() < 0:
+        time.sleep(abs(remTime.total_seconds()))
 
 def menuSelector(choice):
     if choice in ["1", "2", "3", "4", "5", "6"]:
@@ -23,7 +34,7 @@ def menuSelector(choice):
         elif choice == "2":
             viewContacts()
         elif choice == "3":
-            searchContact()
+            if searchContact() == False: return
         elif choice == "4":
             ic("Update contact")
             updateContact()
@@ -84,6 +95,7 @@ def viewContacts():
 def searchContact():
     utils.clearScreen()
     name = input("Enter a name to search: ").strip().lower().split() or None
+    if not name: return False
     fullName = " ".join(name) if name else None
     result = phonebookHash.searchContacts(fullName)
     if result:
@@ -96,7 +108,7 @@ def searchContact():
             while True:
                 try:
                     userInput = input("\nChoose the option or press Enter to return: ")
-                    if userInput == "": return
+                    if userInput == "": return False
                     option = int(userInput)         # Convert input to an integer
                     if option < 1 or option > len(result):
                         print("Invalid input! Please enter a valid number.")
@@ -109,7 +121,7 @@ def searchContact():
 
     else:
         print("No matching contacts found.")
-    utils.goBack()
+    return True
 
 def updateContact():
     print("This is an updateContact function")
@@ -123,7 +135,6 @@ def deleteContact():
         phonebookHash = newPhonebookHash
         phonebookHash.save()
         print("The Phonebook has been erased successfully")
-        utils.goBack()
         return
     fullName = " ".join(name) if name else None
     result = phonebookHash.searchContacts(fullName)
