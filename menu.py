@@ -124,11 +124,17 @@ def searchContact():
     return True
 
 def updateContact():
-    print("This is an updateContact function")
+    name = input("Enter a name to update a contact: ").strip().lower().split() or None
+    if not name: return
+    fullName = " ".join(name) if name else None
+    updateName = searchForName(fullName)
+    if updateName:
+        print("Needs to be implemented")
 
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable
     name = input("Enter a name to delete a contact\n(\'Delete All\' to delete all contacts): ").strip().lower().split() or None
+    if not name: return
     fullName = " ".join(name) if name else None
     if fullName.lower() == "delete all": 
         newPhonebookHash = HashTable()
@@ -136,35 +142,40 @@ def deleteContact():
         phonebookHash.save()
         print("The Phonebook has been erased successfully")
         return
+    deleteName = searchForName(name)
+    if deleteName:
+        verifyDeleteContact(deleteName)
+    
+def searchForName(name):
     fullName = " ".join(name) if name else None
+    if not fullName: return None
     result = phonebookHash.searchContacts(fullName)
     if result:
         if len(result) == 1:
-            verifyDeleteContact(result[0].fullName)
-            return           
+            return result[0].fullName
         else:
             for i, contact in enumerate(result):
                 print(f"{i + 1}: {contact.fullName}")
             while True:
                 try:
                     userInput = input("\nChoose the option or press Enter to return: ")
-                    if userInput == "": return
+                    if userInput == "": return None
                     option = int(userInput)         # Convert input to an integer
                     if option < 1 or option > len(result):
                         print("Invalid input! Please enter a valid number.")
                     else :
-                        verifyDeleteContact(result[option - 1].fullName)
-                        break
+                        return result[option - 1].fullName
                 except ValueError:
                     print("Invalid input! Please enter a valid number.")
     else:
         print("No matching contacts found.")
+        return None
 
-def verifyDeleteContact(name):
+def verifyDeleteContact(fullName):
     while True:
-        question = input(f"Do you want to delete the contact \'{name}\'  (Y / N) ? :")
+        question = input(f"Do you want to delete the contact \'{fullName}\'  (Y / N) ? :")
         if question.lower() == "y":
-            phonebookHash.deleteOneContact(name)
+            phonebookHash.deleteOneContact(fullName)
             phonebookHash.save()
             visualize(phonebookHash, "menu.verifyDeleteContact function")
             return

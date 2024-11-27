@@ -147,5 +147,6 @@ class HashTable:
         for bucket in self.table:
             for contact in bucket:
                 if fullName.lower() in contact.fullName.lower():
+                    print(f"{contact.fullName} was removed from the Phonebook")
                     bucket.remove(contact)
                     self.contactCount -= 1
