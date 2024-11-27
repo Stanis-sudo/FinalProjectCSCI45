@@ -126,10 +126,46 @@ def searchContact():
 def updateContact():
     name = input("Enter a name to update a contact: ").strip().lower().split() or None
     if not name: return
-    fullName = " ".join(name) if name else None
-    updateName = searchForName(fullName)
+    updateName = searchForName(name)
     if updateName:
         print("Needs to be implemented")
+        print(" 1. Update First Name")
+        print(" 2. Update Middle Name")
+        print(" 3. Update Last Name")
+        print(" 4. Update Phone Number")
+        print(" 5. Update Email Address")
+        choice = input(" Choose an option: ").strip()
+        updateSelector(choice, updateName)
+
+def updateSelector(choice, fullName):
+    while True:
+        if choice in ["1", "2", "3", "4", "5"]:
+            utils.clearScreen()
+            if choice == "1":
+                addContact()
+                break
+            elif choice == "2":
+                viewContacts()
+                break
+            elif choice == "3":
+                if searchContact() == False: return
+                break
+            elif choice == "4":
+                updateContact()
+                break
+            elif choice == "5":
+                inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
+                if inputEmail is not None:
+                    email = inputEmail[0]
+                else: email = None
+                for bucket in phonebookHash.table:
+                    for contact in bucket:
+                        if fullName in contact.fullName:
+                            contact.emailAddress = email
+                            print(f"Email address for {fullName} was updated")
+                break
+        else:
+            print("\n Invalid option, please try again.")
 
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable
