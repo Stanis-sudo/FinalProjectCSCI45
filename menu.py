@@ -22,7 +22,7 @@ def init():
     startTime = datetime.datetime.now()
     phonebookHash.load()
     remTime = datetime.datetime.now() - startTime - datetime.timedelta(seconds = 1.5)
-    # Check if the remaining time is greater than 0
+    # Check if the remaining time is less than 0
     if remTime.total_seconds() < 0:
         time.sleep(abs(remTime.total_seconds()))
 
@@ -49,7 +49,28 @@ def menuSelector(choice):
     utils.goBack()
     return False
 
+def getInput(message, isRequired, inputName = None):
+    while True:
+        userInput = input(message).strip().title().split() or None
+        if userInput is not None:
+            validInput = userInput[0]
+            return validInput
+        elif isRequired:
+            #utils.clearScreen()
+            print(f"Error!\n{inputName} cannot be empty")
+            continue
+        else: return None
+
+
 def addContact():
+    firstName = getInput("First Name:                                 ", True, "First Name")
+    middleName = getInput("Middle Name (To skip press Enter):          ", False)
+    lastName = getInput("Last Name (To skip press Enter):            ", False)
+    phone = getInput("Phone Number:                               ", True, "Phone Number")
+    email = getInput("Email Address (To skip press Enter):        ", False)
+
+
+    """
     name_first = input("First Name:                                 ").strip().title().split() or None
     if name_first is not None:
         firstName = name_first[0]
@@ -57,6 +78,7 @@ def addContact():
         utils.clearScreen()
         print("Error!\nFirst Name cannot be empty")
         return
+        
     
     name_middle = input("Middle Name (To skip press Enter):          ").strip().title().split() or None
     if name_middle is not None:
@@ -79,7 +101,7 @@ def addContact():
     inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
     if inputEmail is not None:
         email = inputEmail[0]
-    else: email = None
+    else: email = None"""
 
     newContact = Contact(firstName, phone, middleName, lastName, email)
     phonebookHash.insert(newContact)
@@ -142,7 +164,10 @@ def updateSelector(choice, fullName):
         if choice in ["1", "2", "3", "4", "5"]:
             utils.clearScreen()
             if choice == "1":
-                addContact()
+                firstName = input("First Name:                                 ").strip().title().split() or None
+                if inputPhone is not None:
+                    phone = inputPhone[0]
+
                 break
             elif choice == "2":
                 viewContacts()
@@ -151,7 +176,15 @@ def updateSelector(choice, fullName):
                 if searchContact() == False: return
                 break
             elif choice == "4":
-                updateContact()
+                inputPhone = input("Phone Number:                               ").strip().split() or None
+                if inputPhone is not None:
+                    phone = inputPhone[0]
+                else: phone = None
+                for bucket in phonebookHash.table:
+                    for contact in bucket:
+                        if fullName in contact.fullName:
+                            contact.inputPhone = phone
+                            print(f"Phone Number for {fullName} was updated")
                 break
             elif choice == "5":
                 inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
