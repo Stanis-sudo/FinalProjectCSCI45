@@ -6,7 +6,7 @@ from contact import Contact
 from hash import HashTable
 from icecream import ic
 
-ic.disable()
+#ic.disable()
 
 phonebookHash = HashTable()
 
@@ -132,19 +132,15 @@ def updateSelector(choice, fullName):
             utils.clearScreen()
             if choice == "1":
                 firstName = getInput("First Name:                                 ", True, "First Name")
-                for bucket in phonebookHash.table:
-                    for contact in bucket:
-                        if fullName in contact.fullName:
-                            newFullName = " ".join(filter(None, [firstName, contact.middleName, contact.lastName]))
-                            contact.inputPhone = phone
-                            print(f"Phone Number for {fullName} was updated")
-
+                updateInfo(fullName, "First Name", firstName)
                 break
             elif choice == "2":
-                viewContacts()
+                middleName = getInput("Middle Name:                                 ", False)
+                updateInfo(fullName, "Middle Name", middleName)
                 break
             elif choice == "3":
-                if searchContact() == False: return
+                lastName = getInput("Last Name:                                 ", False)
+                updateInfo(fullName, "First Name", lastName)
                 break
             elif choice == "4":
                 phone = getInput("Phone Number:                               ", True, "Phone Number")
@@ -165,7 +161,37 @@ def updateInfo(fullName, param, newValue):
                     contact.phoneNumber = newValue
                 elif param == "Email Address":
                     contact.emailAddress = newValue
+                else: updateName(contact, fullName, param, newValue)
+    phonebookHash.save()
     print(f"{param} for {fullName} was updated")
+
+def updateName(contact, fullName, param, newValue):
+    if param == "First Name":
+        newFullName = " ".join(filter(None, [newValue, contact.middleName, contact.lastName]))
+        newContact = Contact(newValue, contact.phoneNumber, contact.middleName, contact.lastName, contact.emailAddress)
+    elif param == "Middle Name":
+        newFullName = " ".join(filter(None, [contact.firstName, newValue, contact.lastName]))
+        newContact = Contact(contact.firstName, contact.phoneNumber, newValue, contact.lastName, contact.emailAddress)
+    elif param == "Last Name":
+        newFullName = " ".join(filter(None, [contact.firstName, contact.middleName, newValue]))
+        newContact = Contact(contact.firstName, contact.phoneNumber, contact.middleName, newValue, contact.emailAddress)
+    if doesExist(newFullName):
+        print(f"Contact {newFullName} already exists in the Phonebook")
+        return
+    else:
+        ic("Creating a new Contact for Update function")
+        phonebookHash.deleteOneContact(fullName)
+        phonebookHash.insert(newContact)
+        visualize(phonebookHash, "menu.updateInfo.firstName function")
+        
+def doesExist(fullName):
+    for bucket in phonebookHash.table:
+        for contact in bucket:
+            if fullName in contact.fullName:
+                ic("return true for doesExist")
+                return True
+    ic("return false for doesExist")
+    return False
 
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable

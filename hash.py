@@ -88,7 +88,7 @@ class HashTable:
             data.extend(bucket)
         with open(filename, 'wb') as file:
             pickle.dump(data, file)
-        ic(" Data Saved.")
+        ic("Data Saved!!!")
 
     def load (self,filename = fileName):
         try:
