@@ -63,46 +63,13 @@ def getInput(message, isRequired, inputName = None):
 
 
 def addContact():
+    #Get a new Contact data
     firstName = getInput("First Name:                                 ", True, "First Name")
     middleName = getInput("Middle Name (To skip press Enter):          ", False)
     lastName = getInput("Last Name (To skip press Enter):            ", False)
     phone = getInput("Phone Number:                               ", True, "Phone Number")
     email = getInput("Email Address (To skip press Enter):        ", False)
-
-
-    """
-    name_first = input("First Name:                                 ").strip().title().split() or None
-    if name_first is not None:
-        firstName = name_first[0]
-    else:
-        utils.clearScreen()
-        print("Error!\nFirst Name cannot be empty")
-        return
-        
-    
-    name_middle = input("Middle Name (To skip press Enter):          ").strip().title().split() or None
-    if name_middle is not None:
-        middleName = name_middle[0]
-    else: middleName = None
-
-    name_last = input("Last Name (To skip press Enter):            ").strip().title().split() or None
-    if name_last is not None:
-        lastName = name_last[0]
-    else: lastName = None
-    
-    inputPhone = input("Phone Number:                               ").strip().split() or None
-    if inputPhone is not None:
-        phone = inputPhone[0]
-    else:
-        utils.clearScreen()
-        print("Error!\nPhone Number cannot be empty")
-        return
-
-    inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
-    if inputEmail is not None:
-        email = inputEmail[0]
-    else: email = None"""
-
+    #Save the new Contact
     newContact = Contact(firstName, phone, middleName, lastName, email)
     phonebookHash.insert(newContact)
     phonebookHash.save()
@@ -164,9 +131,13 @@ def updateSelector(choice, fullName):
         if choice in ["1", "2", "3", "4", "5"]:
             utils.clearScreen()
             if choice == "1":
-                firstName = input("First Name:                                 ").strip().title().split() or None
-                if inputPhone is not None:
-                    phone = inputPhone[0]
+                firstName = getInput("First Name:                                 ", True, "First Name")
+                for bucket in phonebookHash.table:
+                    for contact in bucket:
+                        if fullName in contact.fullName:
+                            newFullName = " ".join(filter(None, [firstName, contact.middleName, contact.lastName]))
+                            contact.inputPhone = phone
+                            print(f"Phone Number for {fullName} was updated")
 
                 break
             elif choice == "2":
@@ -176,29 +147,25 @@ def updateSelector(choice, fullName):
                 if searchContact() == False: return
                 break
             elif choice == "4":
-                inputPhone = input("Phone Number:                               ").strip().split() or None
-                if inputPhone is not None:
-                    phone = inputPhone[0]
-                else: phone = None
-                for bucket in phonebookHash.table:
-                    for contact in bucket:
-                        if fullName in contact.fullName:
-                            contact.inputPhone = phone
-                            print(f"Phone Number for {fullName} was updated")
+                phone = getInput("Phone Number:                               ", True, "Phone Number")
+                updateInfo(fullName, "Phone Number", phone)
                 break
             elif choice == "5":
-                inputEmail = input("Email Address (To skip press Enter):        ").strip().lower().split() or None
-                if inputEmail is not None:
-                    email = inputEmail[0]
-                else: email = None
-                for bucket in phonebookHash.table:
-                    for contact in bucket:
-                        if fullName in contact.fullName:
-                            contact.emailAddress = email
-                            print(f"Email address for {fullName} was updated")
+                email = getInput("Email Address (To skip press Enter):        ", False)
+                updateInfo(fullName, "Email Address", email)
                 break
         else:
             print("\n Invalid option, please try again.")
+
+def updateInfo(fullName, param, newValue):
+    for bucket in phonebookHash.table:
+        for contact in bucket:
+            if fullName in contact.fullName:
+                if param == "Phone Number":
+                    contact.phoneNumber = newValue
+                elif param == "Email Address":
+                    contact.emailAddress = newValue
+    print(f"{param} for {fullName} was updated")
 
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable
