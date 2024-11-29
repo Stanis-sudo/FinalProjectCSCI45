@@ -61,7 +61,6 @@ def getInput(message, isRequired, inputName = None):
             continue
         else: return None
 
-
 def addContact():
     #Get a new Contact data
     firstName = getInput("First Name:                                 ", True, "First Name")
@@ -77,12 +76,13 @@ def addContact():
     utils.clearScreen()
     print("Contact was added successfully")
 
-
 def viewContacts():
+    if phonebookHash.isEmpty(): return
     phonebookHash.display()
 
 def searchContact():
     utils.clearScreen()
+    if phonebookHash.isEmpty(): return True
     name = input("Enter a name to search: ").strip().lower().split() or None
     if not name: return False
     fullName = " ".join(name) if name else None
@@ -107,51 +107,53 @@ def searchContact():
                         break
                 except ValueError:
                     print("Invalid input! Please enter a valid number.")
-
     else:
         print("No matching contacts found.")
     return True
 
 def updateContact():
+    if phonebookHash.isEmpty(): return
     name = input("Enter a name to update a contact: ").strip().lower().split() or None
     if not name: return
     updateName = searchForName(name)
     if updateName:
-        print("Needs to be implemented")
-        print(" 1. Update First Name")
-        print(" 2. Update Middle Name")
-        print(" 3. Update Last Name")
-        print(" 4. Update Phone Number")
-        print(" 5. Update Email Address")
-        choice = input(" Choose an option: ").strip()
-        updateSelector(choice, updateName)
+        while True:
+            print("Needs to be implemented")
+            print(" 1. Update First Name")
+            print(" 2. Update Middle Name")
+            print(" 3. Update Last Name")
+            print(" 4. Update Phone Number")
+            print(" 5. Update Email Address")
+            choice = input(" Choose an option: ").strip() or None
+            if not choice: return
+            if updateSelector(choice, updateName): return
 
 def updateSelector(choice, fullName):
-    while True:
         if choice in ["1", "2", "3", "4", "5"]:
             utils.clearScreen()
             if choice == "1":
                 firstName = getInput("First Name:                                 ", True, "First Name")
                 updateInfo(fullName, "First Name", firstName)
-                break
+                return True
             elif choice == "2":
                 middleName = getInput("Middle Name:                                 ", False)
                 updateInfo(fullName, "Middle Name", middleName)
-                break
+                return True
             elif choice == "3":
                 lastName = getInput("Last Name:                                 ", False)
                 updateInfo(fullName, "First Name", lastName)
-                break
+                return True
             elif choice == "4":
                 phone = getInput("Phone Number:                               ", True, "Phone Number")
                 updateInfo(fullName, "Phone Number", phone)
-                break
+                return True
             elif choice == "5":
                 email = getInput("Email Address (To skip press Enter):        ", False)
                 updateInfo(fullName, "Email Address", email)
-                break
+                return True
         else:
             print("\n Invalid option, please try again.")
+            return False
 
 def updateInfo(fullName, param, newValue):
     for bucket in phonebookHash.table:
@@ -183,7 +185,7 @@ def updateName(contact, fullName, param, newValue):
         phonebookHash.deleteOneContact(fullName)
         phonebookHash.insert(newContact)
         visualize(phonebookHash, "menu.updateInfo.firstName function")
-        
+
 def doesExist(fullName):
     for bucket in phonebookHash.table:
         for contact in bucket:
@@ -195,6 +197,7 @@ def doesExist(fullName):
 
 def deleteContact():
     global phonebookHash  # Tell Python to use the global variable
+    if phonebookHash.isEmpty(): return
     name = input("Enter a name to delete a contact\n(\'Delete All\' to delete all contacts): ").strip().lower().split() or None
     if not name: return
     fullName = " ".join(name) if name else None

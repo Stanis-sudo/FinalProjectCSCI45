@@ -1,4 +1,3 @@
-
 import math
 import utils
 import pickle
@@ -46,7 +45,7 @@ class HashTable:
             if contactExist.fullName == contact.fullName:
                 while True:
                     utils.clearScreen
-                    yesNo = input(f"The contact {contact.fullName} already exist in the Phonebook.\n Do you want to update the existing contact?\nY/N")
+                    yesNo = input(f"The contact {contact.fullName} already exist in the Phonebook.\n Do you want to replace the existing contact?\nY/N")
                     if yesNo == "Y":
                         bucket[i] = contact
                         return
@@ -60,10 +59,7 @@ class HashTable:
         self.contactCount += 1
         self.maxElements = max(len(bucket) for bucket in self.table) if self.table else 0
         if self.maxElements > maxCountBucket:
-            #ic(self.table)
             self.resize()
-            #ic(f"Hash Size: {len(self.table)}")
-            #utils.goBack()
             return
         
     def display(self):
@@ -73,7 +69,6 @@ class HashTable:
                 print (f"{i} (Bucket {b}):")
                 print(contact.fullName + '\n' + contact.phoneNumber + '\n')
                 i += 1
-
 
     def resize(self):
         newHashTable = HashTable(math.ceil(len(self.table) / 0.7))
@@ -150,3 +145,9 @@ class HashTable:
                     print(f"{contact.fullName} was removed from the Phonebook")
                     bucket.remove(contact)
                     self.contactCount -= 1
+
+    def isEmpty(self):
+        if self.contactCount < 1:
+            print("The Phonebook is empty")
+            return True
+        return False

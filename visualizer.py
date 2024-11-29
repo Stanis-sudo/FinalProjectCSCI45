@@ -12,7 +12,6 @@ bridges.set_title("Phonebook Storage Visualization")
 bridges.set_description("The Phonebook app uses a custom Hash table to store contacts.")
 #bridges.post_visualization_link(False)
 
-
 def visualize(obj, operation):
     # Create a Bridges array to represent the hash table
     arr = Array1D(len(obj.table))
@@ -42,5 +41,3 @@ def visualize(obj, operation):
         bridges.visualize()
         # Reset stdout back to default
         sys.stdout = sys.__stdout__
-        
-        
