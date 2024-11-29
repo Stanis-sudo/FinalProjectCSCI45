@@ -118,7 +118,7 @@ def updateContact():
     updateName = searchForName(name)
     if updateName:
         while True:
-            print("Needs to be implemented")
+            print(f"Updating contact {updateName}\n")
             print(" 1. Update First Name")
             print(" 2. Update Middle Name")
             print(" 3. Update Last Name")
@@ -156,20 +156,33 @@ def updateSelector(choice, fullName):
             return False
 
 def updateInfo(fullName, param, newValue):
+    updated = False
     for bucket in phonebookHash.table:
         for contact in bucket:
             if fullName in contact.fullName:
                 if param == "Phone Number":
                     contact.phoneNumber = newValue
+                    updated = True
+                    break  # Breaks out of the inner loop
                 elif param == "Email Address":
                     contact.emailAddress = newValue
-                else: updateName(contact, fullName, param, newValue)
-    phonebookHash.save()
-    print(f"{param} for {fullName} was updated")
+                    updated = True
+                    break  # Breaks out of the inner loop
+                else: 
+                    updateName(contact, fullName, param, newValue)
+                    ic("inside updateName")
+                    updated = True
+                    break  # Breaks out of the inner loop
+        if updated:
+            phonebookHash.save()
+            print(f"{param} for {fullName} was updated")
+            break  # Breaks out of the outer loop
 
 def updateName(contact, fullName, param, newValue):
     if param == "First Name":
         newFullName = " ".join(filter(None, [newValue, contact.middleName, contact.lastName]))
+        ic(fullName)
+        ic(newFullName)
         newContact = Contact(newValue, contact.phoneNumber, contact.middleName, contact.lastName, contact.emailAddress)
     elif param == "Middle Name":
         newFullName = " ".join(filter(None, [contact.firstName, newValue, contact.lastName]))
@@ -187,9 +200,10 @@ def updateName(contact, fullName, param, newValue):
         visualize(phonebookHash, "menu.updateInfo.firstName function")
 
 def doesExist(fullName):
+    ic("doesExist func: ", fullName)
     for bucket in phonebookHash.table:
         for contact in bucket:
-            if fullName in contact.fullName:
+            if fullName == contact.fullName:
                 ic("return true for doesExist")
                 return True
     ic("return false for doesExist")

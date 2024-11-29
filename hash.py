@@ -7,7 +7,7 @@ from icecream import ic
 fileName = 'hashData.pkl'
 maxCountBucket = 5
 hashInitSize = 3
-#ic.disable()
+ic.disable()
 
 class HashTable:
 
@@ -141,7 +141,7 @@ class HashTable:
     def deleteOneContact(self, fullName):
         for bucket in self.table:
             for contact in bucket:
-                if fullName.lower() in contact.fullName.lower():
+                if fullName.lower() == contact.fullName.lower():
                     print(f"{contact.fullName} was removed from the Phonebook")
                     bucket.remove(contact)
                     self.contactCount -= 1
