@@ -56,11 +56,13 @@ def getInput(message, inputName = None):
             userInput = input(message).strip().title().split() or None
         elif inputName == "Phone Number":
             userInput = input(message).strip() or None
-            return userInput
         else:
             userInput = input(message).strip().lower().split() or None
         if userInput is not None:
-            validInput = userInput[0]
+            if inputName != "Phone Number":
+                validInput = userInput[0]
+            else:
+                validInput = userInput
             return validInput
         elif inputName in ["First Name", "Phone Number"]:
             #utils.clearScreen()
