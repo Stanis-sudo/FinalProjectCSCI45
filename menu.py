@@ -7,7 +7,7 @@ from contact import Contact
 from hash import HashTable
 from icecream import ic
 
-ic.disable()
+#ic.disable()
 
 phonebookHash = HashTable()
 
@@ -70,46 +70,37 @@ def getInput(message, inputName = None):
             continue
         else: return None
 
-def isValidNumber(phone):
+def validNumber():
     pattern = re.compile(r'^(\+?\d{1,3})?[-.\s]?(\(?\d{3}\)?)[-.\s]?\d{3}[-.\s]?\d{4}$')
-    if not bool(pattern.match(phone)):
-        return None
-    
-    # Remove all non-digit characters
-    digits = re.sub(r'\D', '', phone)
-    
-    # Check if the phone number has exactly 10 digits
-    if len(digits) == 10:
-        return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
-    else:
-        return None  # Return None for invalid phone numbers
+    while True:
+        phone = getInput("Phone Number (10 digits):                   ", "Phone Number")
+        if bool(pattern.match(phone)):
+            # Remove all non-digit characters
+            digits = re.sub(r'\D', '', phone)
+            # Check if the phone number has exactly 10 digits
+            if len(digits) == 10:
+                return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+        print(f"{phone} is not a valid Phone Number")
 
-def isValidEmail(email):
+def validEmail():
     # Regular expression for basic email validation
     pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-    return bool(pattern.match(email))
+    while True:
+        email = getInput("Email Address (To skip press Enter):        ")
+        if not email:
+            return  None
+        elif bool(pattern.match(email)):
+            return email
+        else:
+            print(f"{email} is not a valid Email Address")
 
 def addContact():
     #Get a new Contact data
     firstName = getInput("First Name:                                 ", "First Name")
     middleName = getInput("Middle Name (To skip press Enter):          ", "Middle Name")
     lastName = getInput("Last Name (To skip press Enter):            ", "Last Name")
-    while True:
-        userPhone = getInput("Phone Number (10 digits):                   ", "Phone Number")
-        phone = isValidNumber(userPhone)
-        if phone:
-            break
-        else:
-            print(f"{userPhone} is not a valid Phone Number")
-    while True:
-        userEmail = getInput("Email Address (To skip press Enter):        ")
-        if not userEmail:
-            break
-        if isValidEmail(userEmail):
-            email = userEmail
-            break
-        else:
-            print(f"{userEmail} is not a valid Email Address")
+    phone = validNumber()
+    email = validEmail()
     #Save the new Contact
     newContact = Contact(firstName, phone, middleName, lastName, email)
     phonebookHash.insert(newContact)
@@ -175,23 +166,23 @@ def updateSelector(choice, fullName):
         if choice in ["1", "2", "3", "4", "5", "6"]:
             utils.clearScreen()
             if choice == "1":
-                firstName = getInput("First Name:                                 ", True, "First Name")
+                firstName = getInput("First Name:                                 ", "First Name")
                 updateInfo(fullName, "First Name", firstName)
                 return True
             elif choice == "2":
-                middleName = getInput("Middle Name:                                 ", False)
+                middleName = getInput("Middle Name:                                 ", "Middle Name")
                 updateInfo(fullName, "Middle Name", middleName)
                 return True
             elif choice == "3":
-                lastName = getInput("Last Name:                                 ", False)
+                lastName = getInput("Last Name:                                 ", "Last Name")
                 updateInfo(fullName, "Last Name", lastName)
                 return True
             elif choice == "4":
-                phone = getInput("Phone Number:                               ", True, "Phone Number")
+                phone = validNumber()
                 updateInfo(fullName, "Phone Number", phone)
                 return True
             elif choice == "5":
-                email = getInput("Email Address (To skip press Enter):        ", False)
+                email = validEmail()
                 updateInfo(fullName, "Email Address", email)
                 return True
             elif choice == "6":
@@ -204,13 +195,17 @@ def updateInfo(fullName, param, newValue):
     updated = False
     for bucket in phonebookHash.table:
         for contact in bucket:
-            if fullName in contact.fullName:
+            if fullName == contact.fullName:
                 if param == "Phone Number":
                     contact.phoneNumber = newValue
                     updated = True
                     break  # Breaks out of the inner loop
                 elif param == "Email Address":
+                    ic("Update Info func(email) : ", newValue)
+                    ic(fullName)
+                    ic(contact.fullName)
                     contact.emailAddress = newValue
+                    ic("Update Info func(email) after update : ", {contact.emailAddress})
                     updated = True
                     break  # Breaks out of the inner loop
                 else: 
