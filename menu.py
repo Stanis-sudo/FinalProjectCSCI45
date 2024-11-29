@@ -6,7 +6,7 @@ from contact import Contact
 from hash import HashTable
 from icecream import ic
 
-#ic.disable()
+ic.disable()
 
 phonebookHash = HashTable()
 
@@ -124,12 +124,13 @@ def updateContact():
             print(" 3. Update Last Name")
             print(" 4. Update Phone Number")
             print(" 5. Update Email Address")
-            choice = input(" Choose an option: ").strip() or None
+            print(" 6. Cancel")
+            choice = input("\n Choose an option: ").strip() or None
             if not choice: return
             if updateSelector(choice, updateName): return
 
 def updateSelector(choice, fullName):
-        if choice in ["1", "2", "3", "4", "5"]:
+        if choice in ["1", "2", "3", "4", "5", "6"]:
             utils.clearScreen()
             if choice == "1":
                 firstName = getInput("First Name:                                 ", True, "First Name")
@@ -141,7 +142,7 @@ def updateSelector(choice, fullName):
                 return True
             elif choice == "3":
                 lastName = getInput("Last Name:                                 ", False)
-                updateInfo(fullName, "First Name", lastName)
+                updateInfo(fullName, "Last Name", lastName)
                 return True
             elif choice == "4":
                 phone = getInput("Phone Number:                               ", True, "Phone Number")
@@ -150,6 +151,8 @@ def updateSelector(choice, fullName):
             elif choice == "5":
                 email = getInput("Email Address (To skip press Enter):        ", False)
                 updateInfo(fullName, "Email Address", email)
+                return True
+            elif choice == "6":
                 return True
         else:
             print("\n Invalid option, please try again.")
@@ -190,6 +193,7 @@ def updateName(contact, fullName, param, newValue):
     elif param == "Last Name":
         newFullName = " ".join(filter(None, [contact.firstName, contact.middleName, newValue]))
         newContact = Contact(contact.firstName, contact.phoneNumber, contact.middleName, newValue, contact.emailAddress)
+        ic(newContact)
     if doesExist(newFullName):
         print(f"Contact {newFullName} already exists in the Phonebook")
         return

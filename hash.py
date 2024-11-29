@@ -7,7 +7,6 @@ from icecream import ic
 fileName = 'hashData.pkl'
 maxCountBucket = 5
 hashInitSize = 3
-ic.disable()
 
 class HashTable:
 
