@@ -84,6 +84,11 @@ def isValidNumber(phone):
     else:
         return None  # Return None for invalid phone numbers
 
+def isValidEmail(email):
+    # Regular expression for basic email validation
+    pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+    return bool(pattern.match(email))
+
 def addContact():
     #Get a new Contact data
     firstName = getInput("First Name:                                 ", "First Name")
@@ -94,8 +99,17 @@ def addContact():
         phone = isValidNumber(userPhone)
         if phone:
             break
-        else: print(f"{userPhone} is not a valid Phone Number")
-    email = getInput("Email Address (To skip press Enter):        ")
+        else:
+            print(f"{userPhone} is not a valid Phone Number")
+    while True:
+        userEmail = getInput("Email Address (To skip press Enter):        ")
+        if not userEmail:
+            break
+        if isValidEmail(userEmail):
+            email = userEmail
+            break
+        else:
+            print(f"{userEmail} is not a valid Email Address")
     #Save the new Contact
     newContact = Contact(firstName, phone, middleName, lastName, email)
     phonebookHash.insert(newContact)
