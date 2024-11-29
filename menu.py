@@ -1,6 +1,7 @@
 import utils
 import datetime
 import time
+import re
 from visualizer import visualize
 from contact import Contact
 from hash import HashTable
@@ -49,25 +50,50 @@ def menuSelector(choice):
     utils.goBack()
     return False
 
-def getInput(message, isRequired, inputName = None):
+def getInput(message, inputName = None):
     while True:
-        userInput = input(message).strip().title().split() or None
+        if inputName in ["First Name", "Middle Name", "Last Name"]:
+            userInput = input(message).strip().title().split() or None
+        elif inputName == "Phone Number":
+            userInput = input(message).strip() or None
+            return userInput
+        else:
+            userInput = input(message).strip().lower().split() or None
         if userInput is not None:
             validInput = userInput[0]
             return validInput
-        elif isRequired:
+        elif inputName in ["First Name", "Phone Number"]:
             #utils.clearScreen()
             print(f"Error!\n{inputName} cannot be empty")
             continue
         else: return None
 
+def isValidNumber(phone):
+    pattern = re.compile(r'^(\+?\d{1,3})?[-.\s]?(\(?\d{3}\)?)[-.\s]?\d{3}[-.\s]?\d{4}$')
+    if not bool(pattern.match(phone)):
+        return None
+    
+    # Remove all non-digit characters
+    digits = re.sub(r'\D', '', phone)
+    
+    # Check if the phone number has exactly 10 digits
+    if len(digits) == 10:
+        return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+    else:
+        return None  # Return None for invalid phone numbers
+
 def addContact():
     #Get a new Contact data
-    firstName = getInput("First Name:                                 ", True, "First Name")
-    middleName = getInput("Middle Name (To skip press Enter):          ", False)
-    lastName = getInput("Last Name (To skip press Enter):            ", False)
-    phone = getInput("Phone Number:                               ", True, "Phone Number")
-    email = getInput("Email Address (To skip press Enter):        ", False)
+    firstName = getInput("First Name:                                 ", "First Name")
+    middleName = getInput("Middle Name (To skip press Enter):          ", "Middle Name")
+    lastName = getInput("Last Name (To skip press Enter):            ", "Last Name")
+    while True:
+        userPhone = getInput("Phone Number (10 digits):                   ", "Phone Number")
+        phone = isValidNumber(userPhone)
+        if phone:
+            break
+        else: print(f"{userPhone} is not a valid Phone Number")
+    email = getInput("Email Address (To skip press Enter):        ")
     #Save the new Contact
     newContact = Contact(firstName, phone, middleName, lastName, email)
     phonebookHash.insert(newContact)

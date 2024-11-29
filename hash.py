@@ -44,11 +44,11 @@ class HashTable:
             if contactExist.fullName == contact.fullName:
                 while True:
                     utils.clearScreen
-                    yesNo = input(f"The contact {contact.fullName} already exist in the Phonebook.\n Do you want to replace the existing contact?\nY/N")
-                    if yesNo == "Y":
+                    yesNo = input(f"The contact {contact.fullName} already exists in the Phonebook.\nDo you want to replace the existing contact?\nY/N   :")
+                    if yesNo.upper() == "Y":
                         bucket[i] = contact
                         return
-                    elif yesNo == "N":
+                    elif yesNo.upper() == "N":
                         return
                     else: 
                         print("Wrong input. Try again")
