@@ -74,13 +74,15 @@ def validNumber():
     pattern = re.compile(r'^(\+?\d{1,3})?[-.\s]?(\(?\d{3}\)?)[-.\s]?\d{3}[-.\s]?\d{4}$')
     while True:
         phone = getInput("Phone Number (10 digits):                   ", "Phone Number")
+        if phone.lower() == "cancel":
+            return None
         if bool(pattern.match(phone)):
             # Remove all non-digit characters
             digits = re.sub(r'\D', '', phone)
             # Check if the phone number has exactly 10 digits
             if len(digits) == 10:
                 return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
-        print(f"{phone} is not a valid Phone Number")
+        print(f"{phone} is not a valid Phone Number\nType \'Cancel\' to return to the Main Menu:    ")
 
 def validEmail():
     # Regular expression for basic email validation
@@ -92,7 +94,7 @@ def validEmail():
         elif bool(pattern.match(email)):
             return email
         else:
-            print(f"{email} is not a valid Email Address")
+            print(f"{email} is not a valid Email Address:    ")
 
 def addContact():
     #Get a new Contact data
@@ -100,6 +102,8 @@ def addContact():
     middleName = getInput("Middle Name (To skip press Enter):          ", "Middle Name")
     lastName = getInput("Last Name (To skip press Enter):            ", "Last Name")
     phone = validNumber()
+    if not phone:
+        return
     email = validEmail()
     #Save the new Contact
     newContact = Contact(firstName, phone, middleName, lastName, email)
@@ -179,6 +183,8 @@ def updateSelector(choice, fullName):
                 return True
             elif choice == "4":
                 phone = validNumber()
+                if not phone:
+                    return
                 updateInfo(fullName, "Phone Number", phone)
                 return True
             elif choice == "5":
