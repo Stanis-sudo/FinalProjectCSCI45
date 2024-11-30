@@ -7,7 +7,7 @@ from contact import Contact
 from hash import HashTable
 from icecream import ic
 
-#ic.disable()
+ic.disable()
 
 phonebookHash = HashTable()
 

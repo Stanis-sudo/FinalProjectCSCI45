@@ -4,7 +4,7 @@ import pickle
 from visualizer import visualize
 from icecream import ic
 
-fileName = 'hashData.pkl'
+fileName = 'hashData10.pkl'
 maxCountBucket = 5
 hashInitSize = 3
 
@@ -16,14 +16,14 @@ class HashTable:
         self.maxElements = 0
         self.contactCount = 0
 
-    def customHash(self, key):
+    #def customHash(self, key):
         #hashValue = sum(ord(char) for char in key)
 
-        hashValue = 5381  # A common initial value for DJB2
-        for char in key:
-            hashValue = (hashValue * 33) + ord(char)  # Hashing with multiplication by 33
-        return hashValue % self.size
-    
+        #hashValue = 5381  # A common initial value for DJB2
+        #for char in key:
+            #hashValue = (hashValue * 33) + ord(char)  # Hashing with multiplication by 33
+        #return hashValue % self.size
+
     def customPoliHash(self, key):
         base = 31
         mod = self.size
@@ -71,7 +71,7 @@ class HashTable:
 
     def resize(self):
         newHashTable = HashTable(math.ceil(len(self.table) / 0.7))
-        for i, bucket in enumerate(self.table):
+        for bucket in self.table:
             for contact in bucket:
                 newHashTable.insert(contact)
         self.table = newHashTable.table
